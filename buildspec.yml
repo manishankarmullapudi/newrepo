@@ -6,13 +6,13 @@ phases:
       nodejs: 14
     commands:
       - apt-get install -y unzip
-      - nmp install
+      - npm install
 
   build:
     commands:
       - echo Build started on `date`
       - zip hello.zip ./index.html ./aws.gif ./1.png ./back.jpg
-      - nmp run build
+      - npm run build
    
 artifacts:
   type: 
