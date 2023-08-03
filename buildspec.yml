@@ -2,10 +2,10 @@ version: 0.2
 
 env:
   secrets-manager:
-    LOGIN: newsecret:sonartoken
-    HOST: newsecret:HOST
-    Organization: newsecret:Organization
-    Project: newsecret:Project
+    LOGIN: newsecrets:sonartoken
+    HOST: newsecrets:HOST
+    Organization: newsecrets:Organization
+    Project: newsecrets:Project
 phases:
   install:
     commands:
