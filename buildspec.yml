@@ -4,12 +4,10 @@ phases:
   install:
     runtime-versions:
       nodejs: 18
-    commands:
-      - apt-get install -y unzip
 
   build:
     commands:
-      - echo Build started on `date`
+      - echo Build started
    
 artifacts:
   type: 
