@@ -25,7 +25,6 @@ phases:
   build:
     commands:
       - echo "Build phase ..."
-      - zip hello.zip ./index.html ./aws.gif ./1.png ./back.jpg
       - sonar-scanner -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project -Dsonar.organization=$Organization
       - sleep 5
       - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
