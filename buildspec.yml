@@ -13,9 +13,19 @@ phases:
      
     runtime-versions:
       nodejs: 18
+  pre_build:
+    commands:
+      - echo "Pre build phase ..."
+      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
+      - echo "Current path is >>>"
+      - sh $pwd
+      - unzip ./sonar-scanner-cli-4.7.0.2747-linux.zip
+      - ls $pwd
+      - export PATH=$PATH:./sonar-scanner-4.7.0.2747-linux/bin/
   build:
     commands:
       - echo "Build phase ..."
+      - zip hello.zip ./index.html ./aws.gif ./1.png ./back.jpg
       - sonar-scanner -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project -Dsonar.organization=$Organization
       - sleep 5
       - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
@@ -25,6 +35,7 @@ phases:
     commands:
       - echo "Post build phase ..."
  
+   
 artifacts:
   type: 
   files:
