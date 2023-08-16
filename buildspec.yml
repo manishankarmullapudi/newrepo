@@ -6,43 +6,35 @@ env:
     HOST: newsecrets:HOST
     Organization: newsecrets:Organization
     Project: newsecrets:Project
-
 phases:
-  # Stage 1: Build
+  install:
+    commands:
+      - echo "Install phase ..."
+     
+    runtime-versions:
+      nodejs: 18
+  pre_build:
+    commands:
+      - echo "Pre build phase ..."
+      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
+      - echo "Current path is >>>"
+      - sh $pwd
+      - unzip ./sonar-scanner-cli-4.7.0.2747-linux.zip
+      - ls $pwd
+      - export PATH=$PATH:./sonar-scanner-4.7.0.2747-linux/bin/
   build:
     commands:
       - echo "Build phase ..."
-      # Add build commands here
-      - sleep 5
-
-  # Stage 2: Test (SonarQube)
-  test:
-    commands:
-      - echo "Test phase (SonarQube) ..."
-      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
-      - sh $pwd
-      - unzip ./sonar-scanner-cli-4.7.0.2747-linux.zip
-      - export PATH=$PATH:./sonar-scanner-4.7.0.2747-linux/bin/
       - sonar-scanner -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project -Dsonar.organization=$Organization
       - sleep 5
       - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
       - cat result.json
-      - if [ $(jq -r '.projectStatus.status' result.json) = ERROR ]; then $CODEBUILD_BUILD_SUCCEEDING -eq 0; fi
-
-  # Stage 3: Deploy
-  deploy:
+      - if [ $(jq -r '.projectStatus.status' result.json) = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ;fi
+  post_build:
     commands:
-      - echo "Deploy phase ..."
-      # Add deployment commands here
-
-  # Stage 4: Dummy DAST Scan
-  dummy_dast:
-    commands:
-      - echo "Dummy DAST scan phase ..."
-      # Add dummy DAST scan commands here
-
-  # Define other stages as needed
-
+      - echo "Post build phase ..."
+ 
+   
 artifacts:
   type: 
   files:
